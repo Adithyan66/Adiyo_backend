@@ -526,7 +526,7 @@ export const googleLogin = async (req, res) => {
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            sameSite: 'none',
+            sameSite: 'non',
             maxAge: cookieMaxAge
         });
         console.log("Cookie set, sending response...");
@@ -562,7 +562,7 @@ export const logout = (req, res) => {
         res.clearCookie("refreshToken", {
             httpOnly: true,
             secure: false,
-            sameSite: "none",
+            sameSite: "strict",
             path: "/",
         });
 
@@ -629,12 +629,12 @@ export const profile = async (req, res) => {
 export const tokenRefresh = async (req, res) => {
     let token = req.cookies?.refreshToken;
 
-    if (!token && req.headers.authorization) {
-        const authHeader = req.headers.authorization;
-        if (authHeader.startsWith('Bearer ')) {
-            token = authHeader.split(' ')[1];
-        }
-    }
+    // if (!token && req.headers.authorization) {
+    //     const authHeader = req.headers.authorization;
+    //     if (authHeader.startsWith('Bearer ')) {
+    //         token = authHeader.split(' ')[1];
+    //     }
+    // }
 
     if (!token) {
         return res.status(BAD_REQUEST).json({
@@ -644,6 +644,7 @@ export const tokenRefresh = async (req, res) => {
     }
 
     try {
+
         const payload = jwt.verify(token, process.env.JWT_REFRESH_SECRET);
 
         const user = await User.findById(payload.userId).select('-password');
