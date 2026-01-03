@@ -169,7 +169,7 @@ export const signUp = async (req, res) => {
         res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
             secure: false,
-            sameSite: "strict",
+            sameSite: "none",
             path: "/",
             maxAge: cookieMaxAge
         });
@@ -244,7 +244,7 @@ export const login = async (req, res) => {
         res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
             secure: false,
-            sameSite: "strict",
+            sameSite: "none",
             path: "/",
             maxAge: cookieMaxAge
         });
@@ -526,7 +526,7 @@ export const googleLogin = async (req, res) => {
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            sameSite: 'strict',
+            sameSite: 'none',
             maxAge: cookieMaxAge
         });
         console.log("Cookie set, sending response...");
@@ -562,7 +562,7 @@ export const logout = (req, res) => {
         res.clearCookie("refreshToken", {
             httpOnly: true,
             secure: false,
-            sameSite: "strict",
+            sameSite: "none",
             path: "/",
         });
 
